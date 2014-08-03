@@ -57,7 +57,7 @@ module Esq
     desc 'move', 'move index'
     option :source, type: :string, aliases: '--source', required: true, desc: 'source host'
     option :dest, type: :string, aliases: '--dest', required: true, desc: 'dest host'
-    option :query, type: :string, aliases: '-q', required: true, default: nil, desc: 'query'
+    option :query, type: :string, aliases: '-q', default: nil, desc: 'query'
     def move
       @core.move(options['source'], options['dest'], options['query'])
     end
