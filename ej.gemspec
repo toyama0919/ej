@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'esq/version'
+require 'ej/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "esq"
-  spec.version       = Esq::VERSION
+  spec.name          = "ej"
+  spec.version       = Ej::VERSION
   spec.authors       = ["toyama0919"]
   spec.email         = ["toyama0919@gmail.com"]
   spec.summary       = %q{Command-line MYSQL TO JSON processor.}

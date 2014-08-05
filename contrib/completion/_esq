@@ -1,3 +1,0 @@
-#compdef myq
-
-compadd `esq help | grep myq | cut -d " " -f 3-4`

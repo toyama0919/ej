@@ -3,19 +3,19 @@
 require 'thor'
 require 'yajl'
 require 'elasticsearch'
-require 'esq/core'
+require 'ej/core'
 require 'active_support/core_ext/array'
 require 'active_support/core_ext/string'
 require 'logger'
 
-USER_SETTING_FILE = "#{ENV['HOME']}/.esqrc"
-CURRENT_SETTING_FILE = ".esqrc"
+USER_SETTING_FILE = "#{ENV['HOME']}/.ejrc"
+CURRENT_SETTING_FILE = ".ejrc"
 
-module Esq
+module Ej
   class Commands < Thor
     class_option :index, aliases: '-i', type: :string, default: '_all', desc: 'index'
     class_option :host, aliases: '-h', type: :string, default: 'localhost', desc: 'host'
-    class_option :profile, aliases: '-p', type: :string, default: 'default', desc: 'profile by .esqrc'
+    class_option :profile, aliases: '-p', type: :string, default: 'default', desc: 'profile by .ejrc'
     class_option :debug, aliases: '-d', type: :string, default: false, desc: 'debug mode'
     map '-s' => :search
     map '-c' => :facet
@@ -30,12 +30,12 @@ module Esq
     def initialize(args = [], options = {}, config = {})
       super(args, options, config)
       @global_options = config[:shell].base.options
-      @core = Esq::Core.new(@global_options['host'], @global_options['index'], @global_options['debug'])
+      @core = Ej::Core.new(@global_options['host'], @global_options['index'], @global_options['debug'])
     end
 
     desc 'init', 'init'
     def init
-      setting_file_path = "#{ENV['HOME']}/.esqrc"
+      setting_file_path = "#{ENV['HOME']}/.ejrc"
       default = {}
       default['default'] = {}
       default['default']['host'] = ask("What is default host?", default: 'localhost')
@@ -136,7 +136,7 @@ module Esq
     def not_analyzed
       json = File.read(File.expand_path('../../../template/not_analyze_template.json', __FILE__))
       hash = Yajl::Parser.parse(json)
-      puts_json(@core.put_template('esq_init', hash))
+      puts_json(@core.put_template('ej_init', hash))
     end
 
     desc 'put_routing', 'put routing'

@@ -6,7 +6,7 @@ require 'elasticsearch'
 require 'hashie'
 require 'pp'
 
-module Esq
+module Ej
   class Core
     def initialize(host, index, debug)
       @logger =  Logger.new($stderr)
