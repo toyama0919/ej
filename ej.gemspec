@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Ej::VERSION
   spec.authors       = ["toyama0919"]
   spec.email         = ["toyama0919@gmail.com"]
-  spec.summary       = %q{Command-line MYSQL TO JSON processor.}
-  spec.description   = %q{Command-line MYSQL TO JSON processor.}
+  spec.summary       = %q{Command-line Elasticsearch TO JSON processor.}
+  spec.description   = %q{Command-line Elasticsearch TO JSON processor.}
   spec.homepage      = ""
   spec.license       = "MIT"
 
