@@ -54,6 +54,12 @@ module Ej
       puts_json(@core.search(options['type'], query, options['size'], options['from'], options['source_only']))
     end
 
+    desc 'total [lucene query]', 'search'
+    option :type, type: :string, aliases: '-t', default: nil, desc: 'type'
+    def total(query = nil)
+      puts_json(@core.search(options['type'], query, 0, 0, false))
+    end
+
     desc 'move', 'move index'
     option :source, type: :string, aliases: '--source', required: true, desc: 'source host'
     option :dest, type: :string, aliases: '--dest', required: true, desc: 'dest host'
