@@ -21,7 +21,7 @@ module Ej
       search_option = { index: @index, type: type, body: body }
       search_option[:routing] = routing unless routing.nil?
       results = Hashie::Mash.new(@client.search(search_option))
-      source_only ? get_sources(results) : result
+      source_only ? get_sources(results) : results
     end
 
     def move(source, dest, query)
