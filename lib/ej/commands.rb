@@ -18,7 +18,8 @@ module Ej
     class_option :profile, aliases: '-p', type: :string, default: 'default', desc: 'profile by .ejrc'
     class_option :debug, aliases: '-d', type: :string, default: false, desc: 'debug mode'
     map '-s' => :search
-    map '-c' => :facet
+    map '-f' => :facet
+    map '-c' => :count
     map '-I' => :bulk
     map '-l' => :indices
     map '-a' => :aliases
@@ -56,7 +57,7 @@ module Ej
 
     desc 'total [lucene query]', 'total'
     option :type, type: :string, aliases: '-t', default: nil, desc: 'type'
-    def total(query = nil)
+    def count(query = nil)
       puts_json(@core.search(options['type'], query, 0, 0, false))
     end
 
@@ -81,7 +82,7 @@ module Ej
       @core.dump(options['query'])
     end
 
-    desc '-c', 'facet'
+    desc '-f', 'facet'
     option :query, type: :string, aliases: '-q', default: '*', desc: 'query'
     option :size, type: :numeric, aliases: '-n', default: 10, desc: 'size'
     def facet(term)
@@ -128,11 +129,6 @@ module Ej
     desc 'indices', 'indices'
     def indices
       puts_json(@core.indices)
-    end
-
-    desc 'count', 'count'
-    def count
-      puts_json(@core.count)
     end
 
     desc 'stats', 'count'

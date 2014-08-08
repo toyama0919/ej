@@ -40,11 +40,14 @@ module Ej
         body = { size: per, from: from }
         body[:query] = { query_string: { query: query } } unless query.nil?
         data = Hashie::Mash.new(source_client.search index: @index, body: body)
+        p data.hits.hits.size
         break if data.hits.hits.empty?
         bulk_message = []
         data.hits.hits.each do |doc|
-          bulk_message << { 'index' => { '_index' => doc._index, '_type' => doc._type, '_id' => doc._id } }
-          bulk_message << doc._source
+          source = doc.delete('_source')
+          doc.delete('_score')
+          bulk_message << { index: doc.to_h }
+          bulk_message << source
         end
         dest_client.bulk body: bulk_message unless bulk_message.empty?
         num += 1
@@ -120,10 +123,6 @@ module Ej
 
     def indices
       @client.cat.indices format: 'json'
-    end
-
-    def count
-      @client.cat.count index: @index, format: 'json'
     end
 
     def stats
