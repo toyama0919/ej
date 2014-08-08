@@ -1,3 +1,0 @@
-#compdef myq
-
-compadd `ej help | grep myq | cut -d " " -f 3-4`
