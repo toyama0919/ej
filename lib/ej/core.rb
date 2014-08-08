@@ -24,6 +24,12 @@ module Ej
       source_only ? get_sources(results) : results
     end
 
+    def distinct(term, type, query)
+      body = { size: 0, "aggs"=>{ term + "_count"=>{"cardinality"=>{"field"=>term}}}}
+      body[:query] = { query_string: { query: query } } unless query.nil?
+      @client.search index: @index, type: type, body: body
+    end
+
     def move(source, dest, query)
       per = 30000
       source_client = Elasticsearch::Client.new hosts: source, index: @index, logger: @logger

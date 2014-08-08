@@ -54,10 +54,17 @@ module Ej
       puts_json(@core.search(options['type'], query, options['size'], options['from'], options['source_only']))
     end
 
-    desc 'total [lucene query]', 'search'
+    desc 'total [lucene query]', 'total'
     option :type, type: :string, aliases: '-t', default: nil, desc: 'type'
     def total(query = nil)
       puts_json(@core.search(options['type'], query, 0, 0, false))
+    end
+
+    desc 'distinct [lucene query]', 'distinct'
+    option :type, type: :string, aliases: '-t', default: nil, desc: 'type'
+    option :query, type: :string, aliases: '-q', default: nil, desc: 'query'
+    def distinct(term)
+      puts_json(@core.distinct(term, options['type'], options['query']))
     end
 
     desc 'move', 'move index'
