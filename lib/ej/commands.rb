@@ -15,7 +15,6 @@ module Ej
   class Commands < Thor
     class_option :index, aliases: '-i', type: :string, default: '_all', desc: 'index'
     class_option :host, aliases: '-h', type: :string, default: 'localhost', desc: 'host'
-    class_option :profile, aliases: '-p', type: :string, default: 'default', desc: 'profile by .ejrc'
     class_option :debug, aliases: '-d', type: :string, default: false, desc: 'debug mode'
     map '-s' => :search
     map '-f' => :facet
