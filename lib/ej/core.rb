@@ -157,11 +157,15 @@ module Ej
       @client.indices.recovery index: @index
     end
 
-    def delete(index, query)
+    def delete(index, type, query)
       if query.nil?
-        @client.indices.delete index: index
+        if type.nil?
+          @client.indices.delete index: index
+        else
+          @client.delete_by_query index: index, type: type, q: '*'
+        end
       else
-        @client.delete_by_query index: index, q: query
+        @client.delete_by_query index: index, type: type, q: query
       end
     end
 

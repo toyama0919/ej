@@ -177,9 +177,10 @@ module Ej
 
     desc 'delete', 'delete index'
     option :index, aliases: '-i', type: :string, default: nil, required: true, desc: 'profile by .database.yml'
+    option :type, type: :string, aliases: '-t', default: nil, desc: 'type'
     option :query, type: :string, aliases: '-q', default: nil, desc: 'query'
     def delete
-      @core.delete(options['index'], options['query'])
+      @core.delete(options['index'], options['type'], options['query'])
     end
 
     desc 'delete_template --name [name]', 'delete_template'
