@@ -140,7 +140,7 @@ module Ej
       puts_json(@core.mapping)
     end
 
-    desc 'not_analyzed', 'not_analyzed'
+    desc 'not_analyzed', 'not analyzed'
     def not_analyzed
       json = File.read(File.expand_path('../../../template/not_analyze_template.json', __FILE__))
       hash = Yajl::Parser.parse(json)
@@ -156,15 +156,15 @@ module Ej
       puts_json(@core.put_mapping(options['index'], options['type'], body))
     end
 
-    desc 'put_template', 'put_template'
+    desc 'put_template', 'put template'
     def put_template(name)
       hash = Yajl::Parser.parse(STDIN.read)
       puts_json(@core.put_template(name, hash))
     end
 
-    desc 'create_aliases', 'create_aliases'
-    option :alias, type: :string, aliases: '-a', default: nil, required: true, desc: 'type'
-    option :indices, type: :array, aliases: '-x', default: nil, required: true, desc: 'type'
+    desc 'create_aliases', 'create aliases'
+    option :alias, type: :string, aliases: '-a', default: nil, required: true, desc: 'alias name'
+    option :indices, type: :array, aliases: '-x', default: nil, required: true, desc: 'index array'
     def create_aliases
       @core.create_aliases(options['alias'], options['indices'])
     end
@@ -174,7 +174,7 @@ module Ej
       @core.recovery
     end
 
-    desc 'delete', 'delete index'
+    desc 'delete', 'delete'
     option :index, aliases: '-i', type: :string, default: nil, required: true, desc: 'index'
     option :type, type: :string, aliases: '-t', default: nil, desc: 'type'
     option :query, type: :string, aliases: '-q', default: nil, desc: 'query'
