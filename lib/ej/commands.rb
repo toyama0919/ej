@@ -120,22 +120,22 @@ module Ej
       puts_json(@core.aliases)
     end
 
-    desc 'state', 'health'
+    desc 'state', 'state'
     def state
       puts_json(@core.state)
     end
 
-    desc 'indices', 'indices'
+    desc 'indices', 'show indices summary'
     def indices
       puts_json(@core.indices)
     end
 
-    desc 'stats', 'count'
+    desc 'stats', 'index stats'
     def stats
       puts_json(@core.stats)
     end
 
-    desc 'mapping', 'count'
+    desc 'mapping', 'show mapping'
     def mapping
       puts_json(@core.mapping)
     end
@@ -188,22 +188,22 @@ module Ej
       @core.delete_template(options['name'])
     end
 
-    desc 'template', 'get template'
+    desc 'template', 'show template'
     def template
       puts_json(@core.template)
     end
 
-    desc 'settings', 'get template'
+    desc 'settings', 'show template'
     def settings
       puts_json(@core.settings)
     end
 
-    desc 'warmer', 'get warmer'
+    desc 'warmer', 'warmer'
     def warmer
       puts_json(@core.warmer)
     end
 
-    desc 'refresh', 'get refresh'
+    desc 'refresh', 'refresh'
     def refresh
       puts_json(@core.refresh)
     end
