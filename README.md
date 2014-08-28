@@ -1,6 +1,8 @@
 # Ej
 
-elasticsearch utility
+elasticsearch command line utility
+
+required ruby version >= 2.0
 
 ## Installation
 
@@ -24,7 +26,7 @@ Or install it yourself as:
 ej -s
 ```
 
-### other host
+### other host(default host is localhost)
 ```bash
 ej -s -h other_host
 ```
@@ -36,17 +38,27 @@ ej -s "ip_address: 127.0.0.1" -i logstash-2014.07.01
 
 ### index list
 ```bash
-ej -l
+ej -l -h other_host
+```
+
+### count
+```bash
+ej -c "log_date: 2014-01-15"
 ```
 
 ### facet
 ```bash
-ej -c ip_address -q "log_date: 2014-01-15"
+ej -f session_id -q "log_date: 2014-01-15"
 ```
 
 ### mapping
 ```bash
 ej -m
+```
+
+### delete index
+```bash
+ej delete -i logstash-2014.07.01 -h other_host
 ```
 
 
