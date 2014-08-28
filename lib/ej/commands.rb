@@ -8,9 +8,6 @@ require 'active_support/core_ext/array'
 require 'active_support/core_ext/string'
 require 'logger'
 
-USER_SETTING_FILE = "#{ENV['HOME']}/.ejrc"
-CURRENT_SETTING_FILE = ".ejrc"
-
 module Ej
   class Commands < Thor
     class_option :index, aliases: '-i', type: :string, default: '_all', desc: 'index'
@@ -31,18 +28,6 @@ module Ej
       super(args, options, config)
       @global_options = config[:shell].base.options
       @core = Ej::Core.new(@global_options['host'], @global_options['index'], @global_options['debug'])
-    end
-
-    desc 'init', 'init'
-    def init
-      setting_file_path = "#{ENV['HOME']}/.ejrc"
-      default = {}
-      default['default'] = {}
-      default['default']['host'] = ask("What is default host?", default: 'localhost')
-      default['default']['port'] = ask("What is default port?", default: 9200)
-      default['default']['index'] = ask("What is default index?", default: '_all')
-      File.write(setting_file_path, default.to_yaml)
-      say("save setting file #{setting_file_path}", :green)
     end
 
     desc '-s [lucene query]', 'search'
@@ -219,15 +204,5 @@ module Ej
       puts Yajl::Encoder.encode(object)
     end
 
-    def setting
-      if File.exist?(CURRENT_SETTING_FILE)
-        return YAML.load_file(CURRENT_SETTING_FILE)
-      end
-
-      if File.exist?(USER_SETTING_FILE)
-        return YAML.load_file(USER_SETTING_FILE)
-      end
-      return { host: 'localhost', index: '_all', port: 9200 }
-    end
   end
 end
