@@ -175,7 +175,7 @@ module Ej
     end
 
     desc 'delete', 'delete index'
-    option :index, aliases: '-i', type: :string, default: nil, required: true, desc: 'profile by .database.yml'
+    option :index, aliases: '-i', type: :string, default: nil, required: true, desc: 'index'
     option :type, type: :string, aliases: '-t', default: nil, desc: 'type'
     option :query, type: :string, aliases: '-q', default: nil, desc: 'query'
     def delete
