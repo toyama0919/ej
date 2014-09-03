@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["toyama0919@gmail.com"]
   spec.summary       = %q{Command-line Elasticsearch TO JSON processor.}
   spec.description   = %q{Command-line Elasticsearch TO JSON processor.}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/toyama0919/ej"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
