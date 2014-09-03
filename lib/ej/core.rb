@@ -16,7 +16,8 @@ module Ej
     end
 
     def search(type, query, size, from, source_only, routing = nil)
-      body = { size: size, from: from }
+      body = { from: from }
+      body[:size] = size unless size.nil?
       body[:query] = { query_string: { query: query } } unless query.nil?
       search_option = { index: @index, type: type, body: body }
       search_option[:routing] = routing unless routing.nil?

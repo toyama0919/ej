@@ -32,7 +32,7 @@ module Ej
 
     desc '-s [lucene query]', 'search'
     option :type, type: :string, aliases: '-t', default: nil, desc: 'type'
-    option :size, type: :numeric, aliases: '-n', default: 10, desc: 'size'
+    option :size, type: :numeric, aliases: '-n', default: nil, desc: 'size'
     option :from, type: :numeric, aliases: '--from', default: 0, desc: 'from'
     option :source_only, type: :boolean, aliases: '--so', default: true, desc: 'from'
     def search(query = nil)
