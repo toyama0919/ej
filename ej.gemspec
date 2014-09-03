@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Ej::VERSION
   spec.authors       = ["toyama0919"]
   spec.email         = ["toyama0919@gmail.com"]
-  spec.summary       = %q{Command-line Elasticsearch TO JSON processor.}
-  spec.description   = %q{Command-line Elasticsearch TO JSON processor.}
+  spec.summary       = %q{elasticsearch command line utility.}
+  spec.description   = %q{elasticsearch command line utility. Returns all results in json.}
   spec.homepage      = "https://github.com/toyama0919/ej"
   spec.license       = "MIT"
 
