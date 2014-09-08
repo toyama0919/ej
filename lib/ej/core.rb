@@ -41,7 +41,6 @@ module Ej
         body = { size: per, from: from }
         body[:query] = { query_string: { query: query } } unless query.nil?
         data = Hashie::Mash.new(source_client.search index: @index, body: body)
-        p data.hits.hits.size
         break if data.hits.hits.empty?
         bulk_message = []
         data.hits.hits.each do |doc|
