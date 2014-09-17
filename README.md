@@ -28,7 +28,7 @@ ej -s
 
 ### other host(default host is localhost)
 ```bash
-ej -s -h other_host
+ej -s -h other_host:9201
 ```
 
 ### query search and index
