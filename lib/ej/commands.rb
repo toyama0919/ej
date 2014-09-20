@@ -132,7 +132,7 @@ module Ej
       puts_json(@core.put_template('ej_init', hash))
     end
 
-    desc 'put_routing', 'put routing'
+    desc 'put_routing', "put routing.\nexsample. ej put_routing -i someindex -t sometype --path somecolumn"
     option :index, aliases: '-i', type: :string, default: nil, required: true, desc: 'index'
     option :type, aliases: '-t', type: :string, default: nil, required: true, desc: 'type'
     option :path, type: :string, default: nil, required: true, desc: 'path'
