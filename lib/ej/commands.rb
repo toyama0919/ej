@@ -201,7 +201,7 @@ module Ej
     private
 
     def puts_json(object)
-      puts Yajl::Encoder.encode(object)
+      puts Yajl::Encoder.encode(object, pretty: true)
     end
 
   end
