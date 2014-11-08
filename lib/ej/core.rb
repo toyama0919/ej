@@ -91,6 +91,18 @@ module Ej
       @client.search index: @index, body: body
     end
 
+    def aggs(term, size, query)
+      body = {"size"=>0,
+               "query"=>
+                {"filtered"=>
+                  {"query"=>{"query_string"=>{"query"=> query}},
+                   "filter"=>{"bool"=>{"must"=>[], "must_not"=>[]}}}},
+               "aggs"=>
+                {"agg_" + term =>
+                  {"terms"=>{"field"=>term, "size"=>size, "order"=>{"_count"=>"desc"}}}}}
+      @client.search index: @index, body: body
+    end
+
     def min(term)
       body = {
         aggs: {

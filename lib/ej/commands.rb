@@ -73,6 +73,13 @@ module Ej
       puts_json(@core.facet(term, options['size'], options['query']))
     end
 
+    desc 'aggs', 'aggs'
+    option :query, type: :string, aliases: '-q', default: '*', desc: 'query'
+    option :size, type: :numeric, aliases: '-n', default: 10, desc: 'size'
+    def aggs(term)
+      puts_json(@core.aggs(term, options['size'], options['query']))
+    end
+
     desc 'min', 'term'
     option :term, type: :string, aliases: '-k', desc: 'terms'
     def min
