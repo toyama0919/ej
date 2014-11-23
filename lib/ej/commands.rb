@@ -34,9 +34,17 @@ module Ej
     option :type, type: :string, aliases: '-t', default: nil, desc: 'type'
     option :size, type: :numeric, aliases: '-n', default: nil, desc: 'size'
     option :from, type: :numeric, aliases: '--from', default: 0, desc: 'from'
+    option :fields, type: :array, aliases: '--fields', default: nil, desc: 'fields'
     option :source_only, type: :boolean, aliases: '--so', default: true, desc: 'from'
     def search(query = nil)
-      puts_json(@core.search(options['type'], query, options['size'], options['from'], options['source_only']))
+      puts_json(@core.search(options['type'],
+                             query,
+                             options['size'],
+                             options['from'],
+                             options['source_only'],
+                             nil,
+                             options['fields']
+                             ))
     end
 
     desc 'total [lucene query]', 'total'

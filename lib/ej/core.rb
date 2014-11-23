@@ -15,12 +15,13 @@ module Ej
       @client = Elasticsearch::Client.new hosts: host, logger: @logger, index: @index
     end
 
-    def search(type, query, size, from, source_only, routing = nil)
+    def search(type, query, size, from, source_only, routing = nil, fields = nil)
       body = { from: from }
       body[:size] = size unless size.nil?
       body[:query] = { query_string: { query: query } } unless query.nil?
       search_option = { index: @index, type: type, body: body }
       search_option[:routing] = routing unless routing.nil?
+      search_option[:_source] = fields.nil? ? nil : fields.join(',')
       results = Hashie::Mash.new(@client.search(search_option))
       source_only ? get_sources(results) : results
     end
