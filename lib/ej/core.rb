@@ -9,8 +9,7 @@ require 'pp'
 module Ej
   class Core
     def initialize(host, index, debug)
-      @logger =  Logger.new($stderr)
-      @logger.level = debug ? Logger::DEBUG : Logger::INFO
+      @logger =  debug ? Logger.new($stderr) : nil
       @index = index
       @client = Elasticsearch::Client.new hosts: host, logger: @logger, index: @index
     end
