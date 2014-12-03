@@ -32,7 +32,7 @@ module Ej
       @client.search index: @index, type: type, body: body
     end
 
-    def move(source, dest, query)
+    def copy(source, dest, query)
       per = DEFAULT_PER
       num = 0
       logger = Logger.new($stdout)
@@ -54,7 +54,7 @@ module Ej
           bulk_message << source
         end
         dest_client.bulk body: bulk_message unless bulk_message.empty?
-        logger.info("move complete #{from + docs.size}/#{total}")
+        logger.info("copy complete #{from + docs.size}/#{total}")
         num += 1
       end
     end

@@ -60,12 +60,12 @@ module Ej
       puts_json(@core.distinct(term, options['type'], options['query']))
     end
 
-    desc 'move', 'move index'
+    desc 'copy', 'copy index'
     option :source, type: :string, aliases: '--source', required: true, desc: 'source host'
     option :dest, type: :string, aliases: '--dest', required: true, desc: 'dest host'
     option :query, type: :string, aliases: '-q', default: nil, desc: 'query'
-    def move
-      @core.move(options['source'], options['dest'], options['query'])
+    def copy
+      @core.copy(options['source'], options['dest'], options['query'])
     end
 
     desc 'dump', 'move index'
