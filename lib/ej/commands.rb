@@ -68,7 +68,7 @@ module Ej
       @core.copy(options['source'], options['dest'], options['query'])
     end
 
-    desc 'dump', 'move index'
+    desc 'dump', 'dump index'
     option :query, type: :string, aliases: '-q', default: nil, desc: 'query'
     def dump
       @core.dump(options['query'])
