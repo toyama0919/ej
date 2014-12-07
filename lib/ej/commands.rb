@@ -36,20 +36,22 @@ module Ej
     option :from, type: :numeric, aliases: '--from', default: 0, desc: 'from'
     option :fields, type: :array, aliases: '--fields', default: nil, desc: 'fields'
     option :source_only, type: :boolean, aliases: '--so', default: true, desc: 'from'
-    def search(query = nil)
+    option :query, type: :string, aliases: '-q', default: nil, desc: 'query'
+    def search(query = options['query'])
       puts_json(@core.search(options['type'],
                              query,
                              options['size'],
                              options['from'],
                              options['source_only'],
-                             nil,
+                             query,
                              options['fields']
                              ))
     end
 
     desc 'total [lucene query]', 'total'
     option :type, type: :string, aliases: '-t', default: nil, desc: 'type'
-    def count(query = nil)
+    option :query, type: :string, aliases: '-q', default: nil, desc: 'query'
+    def count(query = options['query'])
       puts_json(@core.search(options['type'], query, 0, 0, false))
     end
 
