@@ -210,6 +210,16 @@ module Ej
       puts_json(@core.refresh)
     end
 
+    desc 'info', 'view nodes info'
+    def nodes_info
+      puts_json @core.nodes_info
+    end
+
+    desc 'stats', 'view nodes stats'
+    def nodes_stats
+      puts_json @core.nodes_stats
+    end
+
     desc '--j2h', 'json to hash'
     def json_to_hash
       pp Yajl::Parser.parse(STDIN.read)

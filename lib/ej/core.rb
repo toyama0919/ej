@@ -207,6 +207,14 @@ module Ej
       @client.indices.refresh index: @index
     end
 
+    def nodes_info
+      @client.nodes.info
+    end
+
+    def nodes_stats
+      @client.nodes.stats
+    end
+
     def bulk(timestamp_key, type, add_timestamp, id_keys, index)
       data = parse_json(STDIN.read)
       template = id_keys.map { |key| '%s' }.join('_') unless id_keys.nil?
