@@ -16,7 +16,7 @@ module Ej
     map '-s' => :search
     map '-f' => :facet
     map '-c' => :count
-    map '-I' => :bulk
+    map '-b' => :bulk
     map '-l' => :indices
     map '-a' => :aliases
     map '-m' => :mapping
@@ -102,7 +102,7 @@ module Ej
       puts_json(@core.max(options['term']))
     end
 
-    desc '-I', 'bulk import STDIN JSON'
+    desc '-b', 'bulk import STDIN JSON'
     option :index, aliases: '-i', type: :string, default: "logstash-#{Time.now.strftime('%Y.%m.%d')}", required: true, desc: 'index'
     option :type, type: :string, aliases: '-t', default: nil, required: true, desc: 'type'
     option :timestamp_key, aliases: '--timestamp_key', type: :string, desc: 'timestamp key', default: nil
