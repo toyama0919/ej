@@ -210,12 +210,12 @@ module Ej
       puts_json(@core.refresh)
     end
 
-    desc 'info', 'view nodes info'
+    desc 'nodes_info', 'view nodes info'
     def nodes_info
       puts_json @core.nodes_info
     end
 
-    desc 'stats', 'view nodes stats'
+    desc 'nodes_stats', 'view nodes stats'
     def nodes_stats
       puts_json @core.nodes_stats
     end
