@@ -22,6 +22,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake"
   spec.add_development_dependency "pry"
   spec.add_development_dependency "pry-doc"
+  spec.add_development_dependency 'rspec', '~> 2.4'
   spec.add_runtime_dependency "thor"
   spec.add_runtime_dependency "yajl-ruby"
   spec.add_runtime_dependency "elasticsearch"
