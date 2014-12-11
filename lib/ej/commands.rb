@@ -13,6 +13,8 @@ module Ej
     class_option :index, aliases: '-i', type: :string, default: '_all', desc: 'index'
     class_option :host, aliases: '-h', type: :string, default: 'localhost', desc: 'host'
     class_option :debug, aliases: '-d', type: :string, default: false, desc: 'debug mode'
+    class_option :format, type: :string, default: 'json', enum: ['json', 'yaml'], desc: 'format'
+
     map '-s' => :search
     map '-f' => :facet
     map '-c' => :count
@@ -38,7 +40,7 @@ module Ej
     option :source_only, type: :boolean, aliases: '--so', default: true, desc: 'from'
     option :query, type: :string, aliases: '-q', default: nil, desc: 'query'
     def search(query = options['query'])
-      puts_json(@core.search(options['type'],
+      puts_with_format(@core.search(options['type'],
                              query,
                              options['size'],
                              options['from'],
@@ -52,14 +54,14 @@ module Ej
     option :type, type: :string, aliases: '-t', default: nil, desc: 'type'
     option :query, type: :string, aliases: '-q', default: nil, desc: 'query'
     def count(query = options['query'])
-      puts_json(@core.search(options['type'], query, 0, 0, false))
+      puts_with_format(@core.search(options['type'], query, 0, 0, false))
     end
 
     desc 'distinct [lucene query]', 'distinct'
     option :type, type: :string, aliases: '-t', default: nil, desc: 'type'
     option :query, type: :string, aliases: '-q', default: nil, desc: 'query'
     def distinct(term)
-      puts_json(@core.distinct(term, options['type'], options['query']))
+      puts_with_format(@core.distinct(term, options['type'], options['query']))
     end
 
     desc 'copy', 'copy index'
@@ -80,26 +82,26 @@ module Ej
     option :query, type: :string, aliases: '-q', default: '*', desc: 'query'
     option :size, type: :numeric, aliases: '-n', default: 10, desc: 'size'
     def facet(term)
-      puts_json(@core.facet(term, options['size'], options['query']))
+      puts_with_format(@core.facet(term, options['size'], options['query']))
     end
 
     desc 'aggs', 'aggs'
     option :query, type: :string, aliases: '-q', default: '*', desc: 'query'
     option :size, type: :numeric, aliases: '-n', default: 10, desc: 'size'
     def aggs(term)
-      puts_json(@core.aggs(term, options['size'], options['query']))
+      puts_with_format(@core.aggs(term, options['size'], options['query']))
     end
 
     desc 'min', 'term'
     option :term, type: :string, aliases: '-k', desc: 'terms'
     def min
-      puts_json(@core.min(options['term']))
+      puts_with_format(@core.min(options['term']))
     end
 
     desc 'max', 'count record, group by keys'
     option :term, type: :string, aliases: '-k', desc: 'terms'
     def max
-      puts_json(@core.max(options['term']))
+      puts_with_format(@core.max(options['term']))
     end
 
     desc '-b', 'bulk import STDIN JSON'
@@ -114,39 +116,39 @@ module Ej
 
     desc 'health', 'health'
     def health
-      puts_json(@core.health)
+      puts_with_format(@core.health)
     end
 
     desc '-a', 'list aliases'
     def aliases
-      puts_json(@core.aliases)
+      puts_with_format(@core.aliases)
     end
 
     desc 'state', 'state'
     def state
-      puts_json(@core.state)
+      puts_with_format(@core.state)
     end
 
     desc 'indices', 'show indices summary'
     def indices
-      puts_json(@core.indices)
+      puts_with_format(@core.indices)
     end
 
     desc 'stats', 'index stats'
     def stats
-      puts_json(@core.stats)
+      puts_with_format(@core.stats)
     end
 
     desc 'mapping', 'show mapping'
     def mapping
-      puts_json(@core.mapping)
+      puts_with_format(@core.mapping)
     end
 
     desc 'not_analyzed', 'not analyzed'
     def not_analyzed
       json = File.read(File.expand_path('../../../template/not_analyze_template.json', __FILE__))
       hash = Yajl::Parser.parse(json)
-      puts_json(@core.put_template('ej_init', hash))
+      puts_with_format(@core.put_template('ej_init', hash))
     end
 
     desc 'put_routing', "put routing.\nexsample. ej put_routing -i someindex -t sometype --path somecolumn"
@@ -155,13 +157,13 @@ module Ej
     option :path, type: :string, default: nil, required: true, desc: 'path'
     def put_routing
       body = { options['type'] => {"_routing"=>{"required"=>true, "path"=>options['path']}}}
-      puts_json(@core.put_mapping(options['index'], options['type'], body))
+      puts_with_format(@core.put_mapping(options['index'], options['type'], body))
     end
 
     desc 'put_template', 'put template'
     def put_template(name)
       hash = Yajl::Parser.parse(STDIN.read)
-      puts_json(@core.put_template(name, hash))
+      puts_with_format(@core.put_template(name, hash))
     end
 
     desc 'create_aliases', 'create aliases'
@@ -192,32 +194,32 @@ module Ej
 
     desc 'template', 'show template'
     def template
-      puts_json(@core.template)
+      puts_with_format(@core.template)
     end
 
     desc 'settings', 'show template'
     def settings
-      puts_json(@core.settings)
+      puts_with_format(@core.settings)
     end
 
     desc 'warmer', 'warmer'
     def warmer
-      puts_json(@core.warmer)
+      puts_with_format(@core.warmer)
     end
 
     desc 'refresh', 'refresh'
     def refresh
-      puts_json(@core.refresh)
+      puts_with_format(@core.refresh)
     end
 
     desc 'nodes_info', 'view nodes info'
     def nodes_info
-      puts_json @core.nodes_info
+      puts_with_format @core.nodes_info
     end
 
     desc 'nodes_stats', 'view nodes stats'
     def nodes_stats
-      puts_json @core.nodes_stats
+      puts_with_format @core.nodes_stats
     end
 
     desc '--j2h', 'json to hash'
@@ -227,8 +229,20 @@ module Ej
 
     private
 
+    def puts_with_format(object)
+      if options['format'] == 'json'
+        puts_json(object)
+      elsif options['format'] == 'yaml'
+        puts_yaml(object)
+      end
+    end
+
     def puts_json(object)
       puts Yajl::Encoder.encode(object, pretty: true)
+    end
+
+    def puts_yaml(object)
+      puts YAML.dump(object)
     end
 
   end
