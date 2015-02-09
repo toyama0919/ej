@@ -45,7 +45,7 @@ module Ej
                              options['size'],
                              options['from'],
                              options['source_only'],
-                             query,
+                             nil,
                              options['fields']
                              ))
     end
