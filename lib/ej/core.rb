@@ -106,7 +106,8 @@ module Ej
                "aggs"=>
                 {"agg_" + term =>
                   {"terms"=>{"field"=>term, "size"=>size, "order"=>{"_count"=>"desc"}}}}}
-      @client.search index: @index, body: body
+      results = @client.search index: @index, body: body
+      results['aggregations']["agg_" + term]['buckets']
     end
 
     def min(term)
