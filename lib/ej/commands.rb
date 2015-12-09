@@ -68,14 +68,16 @@ module Ej
     option :source, type: :string, aliases: '--source', required: true, desc: 'source host'
     option :dest, type: :string, aliases: '--dest', required: true, desc: 'dest host'
     option :query, type: :string, aliases: '-q', default: nil, desc: 'query'
+    option :per, type: :numeric, default: nil, desc: 'per'
     def copy
-      @core.copy(options['source'], options['dest'], options['query'])
+      @core.copy(options['source'], options['dest'], options['query'], options['per'])
     end
 
     desc 'dump', 'dump index'
     option :query, type: :string, aliases: '-q', default: nil, desc: 'query'
+    option :per, type: :numeric, default: nil, desc: 'per'
     def dump
-      @core.dump(options['query'])
+      @core.dump(options['query'], options['per'])
     end
 
     desc '-f', 'facet'

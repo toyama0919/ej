@@ -8,7 +8,7 @@ require 'pp'
 
 module Ej
   class Core
-    DEFAULT_PER = 30000
+    DEFAULT_PER = 1000
     def initialize(host, index, debug)
       @logger =  debug ? Logger.new($stderr) : nil
       @index = index
@@ -32,8 +32,8 @@ module Ej
       @client.search index: @index, type: type, body: body
     end
 
-    def copy(source, dest, query)
-      per = DEFAULT_PER
+    def copy(source, dest, query, per_size)
+      per = per_size || DEFAULT_PER
       num = 0
       logger = Logger.new($stdout)
       source_client = Elasticsearch::Client.new hosts: source, index: @index
@@ -59,8 +59,8 @@ module Ej
       end
     end
 
-    def dump(query)
-      per = DEFAULT_PER
+    def dump(query, per_size)
+      per = per_size || DEFAULT_PER
       num = 0
       bulk_message = []
       while true
