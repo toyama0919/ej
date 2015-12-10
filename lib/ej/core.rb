@@ -62,8 +62,8 @@ module Ej
     def dump(query, per_size)
       per = per_size || DEFAULT_PER
       num = 0
-      bulk_message = []
       while true
+        bulk_message = []
         from = num * per
         body = { size: per, from: from }
         body[:query] = { query_string: { query: query } } unless query.nil?
@@ -77,8 +77,8 @@ module Ej
           bulk_message << Yajl::Encoder.encode(source)
         end
         num += 1
+        puts bulk_message.join("\n")
       end
-      puts bulk_message.join("\n")
     end
 
     def facet(term, size, query)
