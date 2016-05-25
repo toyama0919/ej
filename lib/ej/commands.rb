@@ -39,6 +39,7 @@ module Ej
     option :fields, type: :array, aliases: '--fields', default: nil, desc: 'fields'
     option :source_only, type: :boolean, aliases: '--so', default: true, desc: 'from'
     option :query, type: :string, aliases: '-q', default: nil, desc: 'query'
+    option :sort, type: :hash, aliases: '--sort', default: nil, desc: 'ex. --sort @timestamp:desc'
     def search(query = options['query'])
       puts_with_format(@core.search(options['type'],
                              query,
@@ -46,7 +47,8 @@ module Ej
                              options['from'],
                              options['source_only'],
                              nil,
-                             options['fields']
+                             options['fields'],
+                             options['sort']
                              ))
     end
 

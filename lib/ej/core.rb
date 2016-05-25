@@ -15,9 +15,16 @@ module Ej
       @client = Elasticsearch::Client.new hosts: host, logger: @logger, index: @index
     end
 
-    def search(type, query, size, from, source_only, routing = nil, fields = nil)
+    def search(type, query, size, from, source_only, routing = nil, fields = nil, sort = nil)
       body = { from: from }
       body[:size] = size unless size.nil?
+      if sort
+        sorts = []
+        sort.each do |k, v|
+          sorts << { k => v }
+        end
+        body[:sort] = sorts
+      end
       body[:query] = { query_string: { query: query } } unless query.nil?
       search_option = { index: @index, type: type, body: body }
       search_option[:routing] = routing unless routing.nil?
