@@ -4,6 +4,8 @@ elasticsearch command line utility
 
 required ruby version >= 2.0
 
+![ej4.gif](https://qiita-image-store.s3.amazonaws.com/0/26670/116a381c-98f6-aa72-fbd9-ddc4b179b744.gif)
+
 ## Installation
 
 Add this line to your application's Gemfile:
