@@ -11,7 +11,6 @@ module Ej
     class_option :index, aliases: '-i', type: :string, default: '_all', desc: 'index'
     class_option :host, aliases: '-h', type: :string, default: 'localhost', desc: 'host'
     class_option :debug, aliases: '-d', type: :string, default: false, desc: 'debug mode'
-    class_option :format, type: :string, default: 'json', enum: ['json', 'yaml'], desc: 'format'
 
     map '-s' => :search
     map '-f' => :facet
@@ -232,19 +231,7 @@ module Ej
     private
 
     def puts_with_format(object)
-      if options['format'] == 'json'
-        puts_json(object)
-      elsif options['format'] == 'yaml'
-        puts_yaml(object)
-      end
-    end
-
-    def puts_json(object)
       puts Yajl::Encoder.encode(object, pretty: true)
-    end
-
-    def puts_yaml(object)
-      puts YAML.dump(object)
     end
 
   end
