@@ -4,8 +4,6 @@ require 'thor'
 require 'yajl'
 require 'elasticsearch'
 require 'ej/core'
-require 'active_support/core_ext/array'
-require 'active_support/core_ext/string'
 require 'logger'
 
 module Ej

@@ -242,7 +242,7 @@ module Ej
         bulk_message << meta
         bulk_message << record
       end
-      bulk_message.in_groups_of(10000, false) do |block|
+      bulk_message.each_slice(10000).each do |block|
         @client.bulk body: block
       end
     end
