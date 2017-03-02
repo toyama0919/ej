@@ -57,6 +57,9 @@ module Ej
         docs.each do |doc|
           source = doc.delete('_source')
           doc.delete('_score')
+          ['_id', '_type', '_index'].each do |meta_field|
+            source.delete(meta_field)
+          end
           bulk_message << { index: doc.to_h }
           bulk_message << source
         end
