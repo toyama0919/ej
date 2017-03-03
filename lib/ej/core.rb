@@ -10,7 +10,9 @@ module Ej
   class Core
     DEFAULT_PER = 1000
     def initialize(host, index, debug)
-      @logger =  debug ? Logger.new($stderr) : nil
+      @logger =  Logger.new($stderr)
+      @logger.level = debug ? Logger::DEBUG : Logger::INFO
+
       @index = index
       @client = Elasticsearch::Client.new hosts: host, logger: @logger, index: @index
     end
@@ -63,7 +65,8 @@ module Ej
           bulk_message << { index: doc.to_h }
           bulk_message << source
         end
-        dest_client.bulk body: bulk_message unless bulk_message.empty?
+        send_with_retry(dest_client, bulk_message)
+
         logger.info("copy complete #{from + docs.size}/#{total}")
         num += 1
       end
@@ -243,11 +246,26 @@ module Ej
         bulk_message << record
       end
       bulk_message.each_slice(10000).each do |block|
-        @client.bulk body: block
+        send_with_retry(@client, block)
       end
     end
 
     private
+
+    def send_with_retry(client, bulk_message, retry_on_failure = 5)
+      retries = 0
+      begin
+        client.bulk body: bulk_message unless bulk_message.empty?
+      rescue => e
+        if retries < retry_on_failure
+          retries += 1
+          @logger.warn "Could not push logs to Elasticsearch, resetting connection and trying again. #{e.message}"
+          sleep 2**retries
+          retry
+        end
+        raise "Could not push logs to Elasticsearch after #{retries} retries. #{e.message}"
+      end
+    end
 
     def parse_json(buffer)
       begin
