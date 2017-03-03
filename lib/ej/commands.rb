@@ -68,8 +68,9 @@ module Ej
     option :dest, type: :string, aliases: '--dest', required: true, desc: 'dest host'
     option :query, type: :string, aliases: '-q', default: nil, desc: 'query'
     option :per, type: :numeric, default: nil, desc: 'per'
+    option :proc_num, type: :numeric, default: 1, desc: 'proc_num'
     def copy
-      @core.copy(options['source'], options['dest'], options['query'], options['per'])
+      @core.copy(options['source'], options['dest'], options['query'], options['per'], options['proc_num'])
     end
 
     desc 'dump', 'dump index'

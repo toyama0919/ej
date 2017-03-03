@@ -5,6 +5,7 @@ require 'yajl'
 require 'elasticsearch'
 require 'hashie'
 require 'pp'
+require 'parallel'
 
 module Ej
   class Core
@@ -41,20 +42,23 @@ module Ej
       @client.search index: @index, type: type, body: body
     end
 
-    def copy(source, dest, query, per_size)
+    def copy(source, dest, query, per_size, proc_num)
       per = per_size || DEFAULT_PER
       num = 0
       logger = Logger.new($stdout)
       source_client = Elasticsearch::Client.new hosts: source, index: @index
       dest_client = Elasticsearch::Client.new hosts: dest
-      while true
+      calculate_body = { size: 0 }
+      calculate_body[:query] = { query_string: { query: query } } unless query.nil?
+      calculate_data = Hashie::Mash.new(source_client.search index: @index, body: calculate_body)
+      total = calculate_data.hits.total
+      payloads = ((total/per) + 1).times.to_a
+      Parallel.map(payloads, in_processes: proc_num) do |num|
         from = num * per
         body = { size: per, from: from }
         body[:query] = { query_string: { query: query } } unless query.nil?
         data = Hashie::Mash.new(source_client.search index: @index, body: body)
         docs = data.hits.hits
-        total = data.hits.total
-        break if docs.empty?
         bulk_message = []
         docs.each do |doc|
           source = doc.delete('_source')
@@ -67,8 +71,7 @@ module Ej
         end
         send_with_retry(dest_client, bulk_message)
 
-        logger.info("copy complete #{from + docs.size}/#{total}")
-        num += 1
+        logger.info("copy complete (#{from}-#{from + docs.size})/#{total}")
       end
     end
 

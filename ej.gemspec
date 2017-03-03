@@ -27,4 +27,5 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "yajl-ruby"
   spec.add_runtime_dependency "elasticsearch"
   spec.add_runtime_dependency "hashie"
+  spec.add_runtime_dependency "parallel"
 end
