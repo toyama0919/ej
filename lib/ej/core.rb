@@ -42,9 +42,8 @@ module Ej
       @client.search index: @index, type: type, body: body
     end
 
-    def copy(source, dest, query, per_size, proc_num)
+    def copy(source, dest, query, per_size, proc_num, define_from = 0)
       per = per_size || DEFAULT_PER
-      num = 0
       logger = Logger.new($stdout)
       source_client = Elasticsearch::Client.new hosts: source, index: @index
       dest_client = Elasticsearch::Client.new hosts: dest
@@ -55,6 +54,10 @@ module Ej
       payloads = ((total/per) + 1).times.to_a
       Parallel.map(payloads, in_processes: proc_num) do |num|
         from = num * per
+        if from < define_from
+          logger.info("skip index (#{num} #{from}-#{from + per})/#{total}")
+          next
+        end
         body = { size: per, from: from }
         body[:query] = { query_string: { query: query } } unless query.nil?
         data = Hashie::Mash.new(source_client.search index: @index, body: body)
@@ -71,7 +74,7 @@ module Ej
         end
         send_with_retry(dest_client, bulk_message)
 
-        logger.info("copy complete (#{from}-#{from + docs.size})/#{total}")
+        logger.info("copy complete (#{num} #{from}-#{from + docs.size})/#{total}")
       end
     end
 
