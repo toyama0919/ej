@@ -1,11 +1,10 @@
 #!/usr/bin/env ruby
 # coding: utf-8
-require 'yaml'
 require 'yajl'
 require 'elasticsearch'
 require 'hashie'
-require 'pp'
 require 'parallel'
+require 'logger'
 
 module Ej
   class Core
