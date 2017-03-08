@@ -31,7 +31,7 @@ module Ej
     option :size, type: :numeric, aliases: '-n', default: nil, desc: 'size'
     option :from, type: :numeric, aliases: '--from', default: 0, desc: 'from'
     option :fields, type: :array, aliases: '--fields', default: nil, desc: 'fields'
-    option :source_only, type: :boolean, aliases: '--so', default: true, desc: 'from'
+    option :meta, type: :boolean, default: false, desc: 'meta'
     option :query, type: :string, aliases: '-q', default: nil, desc: 'query'
     option :sort, type: :hash, aliases: '--sort', default: nil, desc: 'ex. --sort @timestamp:desc'
     def search(query = options[:query])
@@ -39,7 +39,7 @@ module Ej
                              query,
                              options[:size],
                              options[:from],
-                             options[:source_only],
+                             options[:meta],
                              nil,
                              options[:fields],
                              options[:sort]

@@ -21,7 +21,7 @@ module Ej
       @client = Elasticsearch::Client.new hosts: host, logger: @logger, index: @index
     end
 
-    def search(type, query, size, from, source_only, routing = nil, fields = nil, sort = nil)
+    def search(type, query, size, from, meta, routing = nil, fields = nil, sort = nil)
       body = { from: from }
       body[:size] = size unless size.nil?
       if sort
@@ -36,7 +36,7 @@ module Ej
       search_option[:routing] = routing unless routing.nil?
       search_option[:_source] = fields.nil? ? nil : fields.join(',')
       results = HashWrapper.new(@client.search(search_option))
-      source_only ? get_sources(results) : results
+      meta ? results : get_sources(results)
     end
 
     def distinct(term, type, query)
