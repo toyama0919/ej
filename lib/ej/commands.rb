@@ -20,7 +20,6 @@ module Ej
     map '-a' => :aliases
     map '-m' => :mapping
     map '-e' => :debug_eval
-    map '--j2h' => :json_to_hash
     map '--health' => :health
 
     def initialize(args = [], options = {}, config = {})
@@ -230,11 +229,6 @@ module Ej
     desc 'nodes_stats', 'view nodes stats'
     def nodes_stats
       puts_with_format @core.nodes_stats
-    end
-
-    desc '--j2h', 'json to hash'
-    def json_to_hash
-      pp Yajl::Parser.parse(STDIN.read)
     end
 
     private
