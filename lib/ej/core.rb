@@ -6,6 +6,10 @@ require 'hashie'
 require 'parallel'
 require 'logger'
 
+class HashWrapper < ::Hashie::Mash
+  disable_warnings if respond_to?(:disable_warnings)
+end
+
 module Ej
   class Core
     DEFAULT_PER = 1000
@@ -31,7 +35,7 @@ module Ej
       search_option = { index: @index, type: type, body: body }
       search_option[:routing] = routing unless routing.nil?
       search_option[:_source] = fields.nil? ? nil : fields.join(',')
-      results = Hashie::Mash.new(@client.search(search_option))
+      results = HashWrapper.new(@client.search(search_option))
       source_only ? get_sources(results) : results
     end
 
@@ -48,7 +52,7 @@ module Ej
       dest_client = Elasticsearch::Client.new hosts: dest
       calculate_body = { size: 0 }
       calculate_body[:query] = { query_string: { query: query } } unless query.nil?
-      calculate_data = Hashie::Mash.new(source_client.search index: @index, body: calculate_body)
+      calculate_data = HashWrapper.new(source_client.search index: @index, body: calculate_body)
       total = calculate_data.hits.total
       payloads = ((total/per) + 1).times.to_a
       Parallel.map(payloads, in_processes: proc_num) do |num|
@@ -59,7 +63,7 @@ module Ej
         end
         body = { size: per, from: from }
         body[:query] = { query_string: { query: query } } unless query.nil?
-        data = Hashie::Mash.new(source_client.search index: @index, body: body)
+        data = HashWrapper.new(source_client.search index: @index, body: body)
         docs = data.hits.hits
         bulk_message = []
         docs.each do |doc|
@@ -85,7 +89,7 @@ module Ej
         from = num * per
         body = { size: per, from: from }
         body[:query] = { query_string: { query: query } } unless query.nil?
-        data = Hashie::Mash.new(@client.search index: @index, body: body)
+        data = HashWrapper.new(@client.search index: @index, body: body)
         docs = data.hits.hits
         break if docs.empty?
         docs.each do |doc|
