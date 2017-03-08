@@ -146,8 +146,7 @@ module Ej
         code += %Q{['#{term_name}']['aggs']}
       end
 
-      results = @client.search index: @index, body: body
-      results
+      @client.search index: @index, body: body
     end
 
     def min(term)
