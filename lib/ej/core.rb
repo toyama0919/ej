@@ -116,17 +116,38 @@ module Ej
       @client.search index: @index, body: body
     end
 
-    def aggs(term, size, query)
-      body = {"size"=>0,
-               "query"=>
-                {"filtered"=>
-                  {"query"=>{"query_string"=>{"query"=> query}},
-                   "filter"=>{"bool"=>{"must"=>[], "must_not"=>[]}}}},
-               "aggs"=>
-                {"agg_" + term =>
-                  {"terms"=>{"field"=>term, "size"=>size, "order"=>{"_count"=>"desc"}}}}}
+    def aggs(terms, size, query)
+      body = {
+        "size"=>0,
+        "query"=>{
+          "query_string"=>{
+            "query"=>query
+          }
+        }
+      }
+
+      agg_terms = []
+      code = %Q{['aggs']}
+      terms.each_with_index do |term, i|
+        term_name = "agg_#{term}"
+        aggs_body = {
+          term_name=>{
+            "terms"=>{
+              "field"=>term,
+              "size"=>size,
+              "order"=>{
+                "_count"=>"desc"
+              }
+            }
+          }
+        }
+
+        eval(%Q{body#{code} = aggs_body})
+        code += %Q{['#{term_name}']['aggs']}
+      end
+
       results = @client.search index: @index, body: body
-      results['aggregations']["agg_" + term]['buckets']
+      results
     end
 
     def min(term)

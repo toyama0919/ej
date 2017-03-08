@@ -97,8 +97,9 @@ module Ej
     desc 'aggs', 'aggs'
     option :query, type: :string, aliases: '-q', default: '*', desc: 'query'
     option :size, type: :numeric, aliases: '-n', default: 10, desc: 'size'
-    def aggs(term)
-      puts_with_format(@core.aggs(term, options['size'], options['query']))
+    option :terms, type: :array, aliases: '-t', required: true, desc: 'size'
+    def aggs
+      puts_with_format(@core.aggs(options['terms'], options['size'], options['query']))
     end
 
     desc 'min', 'term'
