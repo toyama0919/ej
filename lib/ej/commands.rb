@@ -25,6 +25,7 @@ module Ej
       @global_options = config[:shell].base.options
       values = Values.new(@global_options)
       @core = Ej::Core.new(values)
+      @indices = Ej::Indices.new(values)
     end
 
     desc '-s [lucene query]', 'search'
@@ -130,7 +131,7 @@ module Ej
 
     desc '-a', 'list aliases'
     def aliases
-      puts_with_format(@core.aliases)
+      puts_with_format(@indices.aliases)
     end
 
     desc 'state', 'state'
@@ -140,24 +141,24 @@ module Ej
 
     desc 'indices', 'show indices summary'
     def indices
-      puts_with_format(@core.indices)
+      puts_with_format(@indices.indices)
     end
 
     desc 'stats', 'index stats'
     def stats
-      puts_with_format(@core.stats)
+      puts_with_format(@indices.stats)
     end
 
     desc 'mapping', 'show mapping'
     def mapping
-      puts_with_format(@core.mapping)
+      puts_with_format(@indices.mapping)
     end
 
     desc 'not_analyzed', 'not analyzed'
     def not_analyzed
       json = File.read(File.expand_path('../../../template/not_analyze_template.json', __FILE__))
       hash = Yajl::Parser.parse(json)
-      puts_with_format(@core.put_template('ej_init', hash))
+      puts_with_format(@indices.put_template('ej_init', hash))
     end
 
     desc 'put_routing', "put routing.\nexsample. ej put_routing -i someindex -t sometype --path somecolumn"
@@ -166,25 +167,25 @@ module Ej
     option :path, type: :string, default: nil, required: true, desc: 'path'
     def put_routing
       body = { options[:type] => {"_routing"=>{"required"=>true, "path"=>options[:path]}}}
-      puts_with_format(@core.put_mapping(options[:index], options[:type], body))
+      puts_with_format(@indices.put_mapping(options[:index], options[:type], body))
     end
 
     desc 'put_template', 'put template'
     def put_template(name)
       hash = Yajl::Parser.parse(STDIN.read)
-      puts_with_format(@core.put_template(name, hash))
+      puts_with_format(@indices.put_template(name, hash))
     end
 
     desc 'create_aliases', 'create aliases'
     option :alias, type: :string, aliases: '-a', default: nil, required: true, desc: 'alias name'
     option :indices, type: :array, aliases: '-x', default: nil, required: true, desc: 'index array'
     def create_aliases
-      @core.create_aliases(options[:alias], options[:indices])
+      @indices.create_aliases(options[:alias], options[:indices])
     end
 
     desc 'recovery', 'recovery'
     def recovery
-      @core.recovery
+      @indices.recovery
     end
 
     desc 'delete', 'delete'
@@ -192,33 +193,33 @@ module Ej
     option :type, type: :string, aliases: '-t', default: nil, desc: 'type'
     option :query, type: :string, aliases: '-q', default: nil, desc: 'query'
     def delete
-      @core.delete(options[:index], options[:type], options[:query])
+      @indices.delete(options[:index], options[:type], options[:query])
     end
 
     desc 'delete_template --name [name]', 'delete_template'
     option :name, type: :string, default: nil, required: true, desc: 'template name'
     def delete_template
-      @core.delete_template(options[:name])
+      @indices.delete_template(options[:name])
     end
 
     desc 'template', 'show template'
     def template
-      puts_with_format(@core.template)
+      puts_with_format(@indices.template)
     end
 
     desc 'settings', 'show template'
     def settings
-      puts_with_format(@core.settings)
+      puts_with_format(@indices.settings)
     end
 
     desc 'warmer', 'warmer'
     def warmer
-      puts_with_format(@core.warmer)
+      puts_with_format(@indices.warmer)
     end
 
     desc 'refresh', 'refresh'
     def refresh
-      puts_with_format(@core.refresh)
+      puts_with_format(@indices.refresh)
     end
 
     desc 'nodes_info', 'view nodes info'

@@ -4,4 +4,5 @@
 require 'ej/version'
 require 'ej/values'
 require 'ej/core'
+require 'ej/indices'
 require 'ej/commands'
