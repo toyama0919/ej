@@ -34,7 +34,7 @@ module Ej
       search_option[:routing] = routing unless routing.nil?
       search_option[:_source] = fields.nil? ? nil : fields.join(',')
       results = HashWrapper.new(@client.search(search_option))
-      meta ? results : get_sources(results)
+      meta ? results : Util.get_sources(results)
     end
 
     def distinct(term, type, query)
@@ -177,7 +177,7 @@ module Ej
     end
 
     def bulk(timestamp_key, type, add_timestamp, id_keys, index)
-      data = parse_json(STDIN.read)
+      data = Util.parse_json(STDIN.read)
       template = id_keys.map { |key| '%s' }.join('_') unless id_keys.nil?
       bulk_message = []
       data.each do |record|
@@ -188,7 +188,7 @@ module Ej
         end
         record.merge!('@timestamp' => timestamp) if add_timestamp
         meta = { index: { _index: index, _type: type } }
-        meta[:index][:_id] = generate_id(template, record, id_keys) unless id_keys.nil?
+        meta[:index][:_id] = Util.generate_id(template, record, id_keys) unless id_keys.nil?
         bulk_message << meta
         bulk_message << record
       end
@@ -213,26 +213,5 @@ module Ej
         raise "Could not push logs to Elasticsearch after #{retries} retries. #{e.message}"
       end
     end
-
-    def parse_json(buffer)
-      begin
-        data = Yajl::Parser.parse(buffer)
-      rescue => e
-        data = []
-        buffer.lines.each do |line|
-          data << Yajl::Parser.parse(line)
-        end
-      end
-      data.class == Array ? data : [data]
-    end
-
-    def generate_id(template, record, id_keys)
-      template % id_keys.map { |key| record[key] }
-    end
-
-    def get_sources(results)
-      results.hits.hits.map { |result| result._source }
-    end
-
   end
 end

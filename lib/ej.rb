@@ -3,6 +3,7 @@
 # coding: utf-8
 require 'ej/version'
 require 'ej/values'
+require 'ej/util'
 require 'ej/core'
 require 'ej/indices'
 require 'ej/cluster'
