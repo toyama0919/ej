@@ -2,7 +2,7 @@
 
 elasticsearch command line utility
 
-required ruby version >= 2.0
+support ruby version >= 2.1
 
 ![ej4.gif](https://qiita-image-store.s3.amazonaws.com/0/26670/116a381c-98f6-aa72-fbd9-ddc4b179b744.gif)
 
@@ -35,7 +35,7 @@ ej -s -h other_host:9201
 
 ### query search and index
 ```bash
-ej -s "ip_address: 127.0.0.1" -i logstash-2014.07.01
+ej -s "ip_address: 127.0.0.1" -i logstash-2014.07.01 -h other_host
 ```
 
 ### index list
@@ -45,17 +45,12 @@ ej -l -h other_host
 
 ### count
 ```bash
-ej -c "log_date: 2014-01-15"
-```
-
-### facet
-```bash
-ej -f session_id -q "log_date: 2014-01-15"
+ej -c "log_date: 2014-01-15" -h other_host
 ```
 
 ### mapping
 ```bash
-ej -m
+ej -m -h other_host
 ```
 
 ### delete index
