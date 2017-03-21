@@ -1,0 +1,17 @@
+language: ruby
+
+rvm:
+  - 2.1.*
+  - 2.2.*
+  - 2.3.3
+  - 2.4.0
+
+gemfile:
+  - Gemfile
+
+os:
+  - linux
+
+before_install: gem update bundler
+
+script: 'bundle exec rake spec'
