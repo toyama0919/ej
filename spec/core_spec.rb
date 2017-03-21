@@ -5,8 +5,8 @@ describe Ej::Core do
   before do
     values = Values.new(
       {
-        index: 'localhost',
-        host: '_all',
+        index: '_all',
+        host: 'localhost',
         debug: false
       }
     )
