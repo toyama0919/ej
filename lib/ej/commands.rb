@@ -119,8 +119,20 @@ module Ej
     option :timestamp_key, aliases: '--timestamp_key', type: :string, desc: 'timestamp key', default: nil
     option :add_timestamp, type: :boolean, default: true, desc: 'add_timestamp'
     option :id_keys, type: :array, aliases: '--id', default: nil, desc: 'id'
+    option :inputs, type: :array, aliases: '--inputs', default: [], desc: 'input files path.'
     def bulk
-      @core.bulk(options[:timestamp_key], options[:type], options[:add_timestamp], options[:id_keys], options[:index])
+      inputs = options[:inputs].empty? ? [STDIN] : options[:inputs]
+      inputs.each do |key|
+        buffer = (key.class == STDIN.class) ? STDIN.read : File.read(key)
+        @core.bulk(
+          options[:timestamp_key],
+          options[:type],
+          options[:add_timestamp],
+          options[:id_keys],
+          options[:index],
+          Util.parse_json(buffer)
+        )
+      end
     end
 
     desc 'health', 'health'

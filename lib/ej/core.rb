@@ -167,8 +167,7 @@ module Ej
       @client.search index: @index, body: body, size: 0
     end
 
-    def bulk(timestamp_key, type, add_timestamp, id_keys, index)
-      data = Util.parse_json(STDIN.read)
+    def bulk(timestamp_key, type, add_timestamp, id_keys, index, data)
       template = id_keys.map { |key| '%s' }.join('_') unless id_keys.nil?
       bulk_message = []
       data.each do |record|
@@ -183,11 +182,7 @@ module Ej
         bulk_message << meta
         bulk_message << record
       end
-      bulk_message.each_slice(10000).each do |block|
-        send_with_retry do
-          @client.bulk body: block unless block.empty?
-        end
-      end
+      send_with_retry { @client.bulk body: bulk_message unless bulk_message.empty? }
     end
 
     private
