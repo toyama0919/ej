@@ -73,7 +73,9 @@ module Ej
           bulk_message << { index: doc.to_h }
           bulk_message << source
         end
-        send_with_retry(dest_client, bulk_message)
+        send_with_retry do
+          dest_client.bulk body: bulk_message unless bulk_message.empty?
+        end
 
         logger.info("copy complete (#{num} #{from}-#{from + docs.size})/#{total}")
       end
@@ -185,16 +187,18 @@ module Ej
         bulk_message << record
       end
       bulk_message.each_slice(10000).each do |block|
-        send_with_retry(@client, block)
+        send_with_retry do
+          @client.bulk body: block unless block.empty?
+        end
       end
     end
 
     private
 
-    def send_with_retry(client, bulk_message, retry_on_failure = 5)
+    def send_with_retry(retry_on_failure = 5)
       retries = 0
       begin
-        client.bulk body: bulk_message unless bulk_message.empty?
+        yield if block_given?
       rescue => e
         if retries < retry_on_failure
           retries += 1
