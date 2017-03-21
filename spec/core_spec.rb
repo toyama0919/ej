@@ -3,7 +3,14 @@ require 'ej'
 
 describe Ej::Core do
   before do
-    @core = Core.new('localhost', '_all', false)
+    values = Values.new(
+      {
+        index: 'localhost',
+        host: '_all',
+        debug: false
+      }
+    )
+    @core = Core.new(values)
   end
 
   it "core not nil" do

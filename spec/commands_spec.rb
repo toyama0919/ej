@@ -14,7 +14,7 @@ describe Ej::Commands do
     output.should include('--query')
     output.should include('--size')
     output.should include('--from')
-    output.should include('--source-only')
+    output.should include('--meta')
   end
 
   it "should exists copy option" do
