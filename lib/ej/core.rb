@@ -168,14 +168,6 @@ module Ej
       @client.search index: @index, body: body, size: 0
     end
 
-    def nodes_info
-      @client.nodes.info
-    end
-
-    def nodes_stats
-      @client.nodes.stats
-    end
-
     def bulk(timestamp_key, type, add_timestamp, id_keys, index)
       data = Util.parse_json(STDIN.read)
       template = id_keys.map { |key| '%s' }.join('_') unless id_keys.nil?

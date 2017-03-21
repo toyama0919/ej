@@ -27,6 +27,7 @@ module Ej
       @core = Ej::Core.new(values)
       @indices = Ej::Indices.new(values)
       @cluster = Ej::Cluster.new(values)
+      @nodes = Ej::Nodes.new(values)
     end
 
     desc '-s [lucene query]', 'search'
@@ -225,12 +226,12 @@ module Ej
 
     desc 'nodes_info', 'view nodes info'
     def nodes_info
-      puts_with_format @core.nodes_info
+      puts_with_format @nodes.nodes_info
     end
 
     desc 'nodes_stats', 'view nodes stats'
     def nodes_stats
-      puts_with_format @core.nodes_stats
+      puts_with_format @nodes.nodes_stats
     end
 
     private
