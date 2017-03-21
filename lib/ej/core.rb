@@ -13,12 +13,10 @@ end
 module Ej
   class Core
     DEFAULT_PER = 1000
-    def initialize(host, index, debug)
-      @logger =  Logger.new($stderr)
-      @logger.level = debug ? Logger::DEBUG : Logger::INFO
-
-      @index = index
-      @client = Elasticsearch::Client.new hosts: host, logger: @logger, index: @index
+    def initialize(values)
+      @logger =  values.logger
+      @index = values.index
+      @client = values.client
     end
 
     def search(type, query, size, from, meta, routing = nil, fields = nil, sort = nil)

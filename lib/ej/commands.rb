@@ -23,7 +23,8 @@ module Ej
     def initialize(args = [], options = {}, config = {})
       super(args, options, config)
       @global_options = config[:shell].base.options
-      @core = Ej::Core.new(@global_options[:host], @global_options[:index], @global_options[:debug])
+      values = Values.new(@global_options)
+      @core = Ej::Core.new(values)
     end
 
     desc '-s [lucene query]', 'search'
