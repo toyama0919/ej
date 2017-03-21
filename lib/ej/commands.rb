@@ -15,7 +15,6 @@ module Ej
     map '-l' => :indices
     map '-a' => :aliases
     map '-m' => :mapping
-    map '-e' => :debug_eval
     map '--health' => :health
 
     def initialize(args = [], options = {}, config = {})
