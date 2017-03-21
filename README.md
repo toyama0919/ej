@@ -1,4 +1,4 @@
-# Ej
+# Ej [![Build Status](https://secure.travis-ci.org/toyama0919/ej.png?branch=master)](http://travis-ci.org/toyama0919/ej)
 
 elasticsearch command line utility
 
