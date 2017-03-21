@@ -26,6 +26,7 @@ module Ej
       values = Values.new(@global_options)
       @core = Ej::Core.new(values)
       @indices = Ej::Indices.new(values)
+      @cluster = Ej::Cluster.new(values)
     end
 
     desc '-s [lucene query]', 'search'
@@ -126,7 +127,7 @@ module Ej
 
     desc 'health', 'health'
     def health
-      puts_with_format(@core.health)
+      puts_with_format(@cluster.health)
     end
 
     desc '-a', 'list aliases'
@@ -136,7 +137,7 @@ module Ej
 
     desc 'state', 'state'
     def state
-      puts_with_format(@core.state)
+      puts_with_format(@cluster.state)
     end
 
     desc 'indices', 'show indices summary'

@@ -168,14 +168,6 @@ module Ej
       @client.search index: @index, body: body, size: 0
     end
 
-    def health
-      @client.cluster.health
-    end
-
-    def state
-      @client.cluster.state
-    end
-
     def nodes_info
       @client.nodes.info
     end
