@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby
-# coding: utf-8
 require 'yajl'
 require 'elasticsearch'
 require 'hashie'

@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby
-# coding: utf-8
 require 'ej/core'
 require 'thor'
 require 'yajl'
