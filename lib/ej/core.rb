@@ -10,7 +10,6 @@ end
 
 module Ej
   class Core
-    DEFAULT_PER = 1000
     def initialize(values)
       @logger =  values.logger
       @index = values.index
