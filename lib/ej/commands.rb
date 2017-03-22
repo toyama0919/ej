@@ -113,7 +113,7 @@ module Ej
       puts_with_format(@core.max(options[:term]))
     end
 
-    desc '-b', 'bulk import STDIN JSON'
+    desc '-b', 'bulk import JSON'
     option :index, aliases: '-i', type: :string, default: "logstash-#{Time.now.strftime('%Y.%m.%d')}", required: true, desc: 'index'
     option :type, type: :string, aliases: '-t', default: nil, required: true, desc: 'type'
     option :timestamp_key, aliases: '--timestamp_key', type: :string, desc: 'timestamp key', default: nil
