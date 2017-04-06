@@ -1,4 +1,7 @@
-# Ej [![Build Status](https://secure.travis-ci.org/toyama0919/ej.png?branch=master)](http://travis-ci.org/toyama0919/ej)
+# Ej 
+
+[![Build Status](https://secure.travis-ci.org/toyama0919/ej.png?branch=master)](http://travis-ci.org/toyama0919/ej)
+[![Gem Version](https://badge.fury.io/rb/ej.svg)](http://badge.fury.io/rb/ej)
 
 elasticsearch command line utility
 
@@ -58,6 +61,22 @@ ej -m -h other_host
 ej delete -i logstash-2014.07.01 -h other_host
 ```
 
+### copy index from remote to remote
+```bash
+ej copy --source remote_host1:9200 --dest remote_host2:9200 -i logstash-2017.01.27 -q 'size: 631'
+```
+
+## monitor
+
+### node stats
+```bash
+ej nodes_stats -h remote_host1
+```
+
+### settings
+```bash
+ej settings -h remote_host1
+```
 
 ## Contributing
 
