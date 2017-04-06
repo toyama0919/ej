@@ -58,7 +58,11 @@ module Ej
         end
         body = { size: per, from: from }
         body[:query] = { query_string: { query: query } } unless query.nil?
-        data = HashWrapper.new(source_client.search index: @index, body: body)
+        search_results = connect_with_retry do
+          source_client.search index: @index, body: body
+        end
+        data = HashWrapper.new(search_results)
+
         docs = data.hits.hits
         bulk_message = []
         docs.each do |doc|
@@ -70,7 +74,7 @@ module Ej
           bulk_message << { index: doc.to_h }
           bulk_message << source
         end
-        send_with_retry do
+        connect_with_retry do
           dest_client.bulk body: bulk_message unless bulk_message.empty?
         end
 
@@ -182,23 +186,23 @@ module Ej
         bulk_message << meta
         bulk_message << record
       end
-      send_with_retry { @client.bulk body: bulk_message unless bulk_message.empty? }
+      connect_with_retry { @client.bulk body: bulk_message unless bulk_message.empty? }
     end
 
     private
 
-    def send_with_retry(retry_on_failure = 5)
+    def connect_with_retry(retry_on_failure = 5)
       retries = 0
       begin
         yield if block_given?
       rescue => e
         if retries < retry_on_failure
           retries += 1
-          @logger.warn "Could not push logs to Elasticsearch, resetting connection and trying again. #{e.message}"
+          @logger.warn "Could not connect to Elasticsearch, resetting connection and trying again. #{e.message}"
           sleep 2**retries
           retry
         end
-        raise "Could not push logs to Elasticsearch after #{retries} retries. #{e.message}"
+        raise "Could not connect to Elasticsearch after #{retries} retries. #{e.message}"
       end
     end
   end
