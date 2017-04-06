@@ -40,48 +40,6 @@ module Ej
       @client.search index: @index, type: type, body: body
     end
 
-    def copy(source, dest, query, per_size, proc_num, define_from = 0)
-      per = per_size || DEFAULT_PER
-      logger = Logger.new($stdout)
-      source_client = Elasticsearch::Client.new hosts: source, index: @index
-      dest_client = Elasticsearch::Client.new hosts: dest
-      calculate_body = { size: 0 }
-      calculate_body[:query] = { query_string: { query: query } } unless query.nil?
-      calculate_data = HashWrapper.new(source_client.search index: @index, body: calculate_body)
-      total = calculate_data.hits.total
-      payloads = ((total/per) + 1).times.to_a
-      Parallel.map(payloads, in_processes: proc_num) do |num|
-        from = num * per
-        if from < define_from
-          logger.info("skip index (#{num} #{from}-#{from + per})/#{total}")
-          next
-        end
-        body = { size: per, from: from }
-        body[:query] = { query_string: { query: query } } unless query.nil?
-        search_results = connect_with_retry do
-          source_client.search index: @index, body: body
-        end
-        data = HashWrapper.new(search_results)
-
-        docs = data.hits.hits
-        bulk_message = []
-        docs.each do |doc|
-          source = doc.delete('_source')
-          doc.delete('_score')
-          ['_id', '_type', '_index'].each do |meta_field|
-            source.delete(meta_field)
-          end
-          bulk_message << { index: doc.to_h }
-          bulk_message << source
-        end
-        connect_with_retry do
-          dest_client.bulk body: bulk_message unless bulk_message.empty?
-        end
-
-        logger.info("copy complete (#{num} #{from}-#{from + docs.size})/#{total}")
-      end
-    end
-
     def dump(query, per_size)
       per = per_size || DEFAULT_PER
       num = 0
@@ -189,7 +147,56 @@ module Ej
       connect_with_retry { @client.bulk body: bulk_message unless bulk_message.empty? }
     end
 
+    def copy(source, dest, query, per_size, scroll)
+      source_client = Elasticsearch::Client.new hosts: source
+      dest_client = Elasticsearch::Client.new hosts: dest
+
+      scroll_option = get_scroll_option(@index, query, per_size, scroll)
+      r = connect_with_retry { source_client.search(scroll_option) }
+      total = r['hits']['total']
+      i = 0
+      i += bulk_results(r, dest_client, i, total)
+
+      while r = connect_with_retry { source_client.scroll(scroll_id: r['_scroll_id'], scroll: scroll) } and
+        (not r['hits']['hits'].empty?) do
+        i += bulk_results(r, dest_client, i, total)
+      end
+    end
+
     private
+
+    def bulk_results(results, dest_client, before_size, total)
+      bulk_message = convert_results(results)
+      connect_with_retry do
+        dest_client.bulk body: bulk_message unless bulk_message.empty?
+        to_size = before_size + (bulk_message.size/2)
+        @logger.info "copy complete (#{before_size}-#{to_size})/#{total}"
+      end
+      return (bulk_message.size/2)
+    end
+
+    def get_scroll_option(index, query, size, scroll)
+      body = {}
+      body[:query] = { query_string: { query: query } } unless query.nil?
+      search_option = { index: index, scroll: scroll, body: body, size: (size || DEFAULT_PER) }
+      search_option
+    end
+
+    def convert_results(search_results)
+      data = HashWrapper.new(search_results)
+      docs = data.hits.hits
+      bulk_message = []
+      docs.each do |doc|
+        source = doc.delete('_source')
+        doc.delete('_score')
+        ['_id', '_type', '_index'].each do |meta_field|
+          source.delete(meta_field)
+        end
+        bulk_message << { index: doc.to_h }
+        bulk_message << source
+      end
+      bulk_message
+    end
 
     def connect_with_retry(retry_on_failure = 5)
       retries = 0

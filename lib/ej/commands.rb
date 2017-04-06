@@ -66,16 +66,14 @@ module Ej
     option :dest, type: :string, aliases: '--dest', required: true, desc: 'dest host'
     option :query, type: :string, aliases: '-q', default: nil, desc: 'query'
     option :per, type: :numeric, default: nil, desc: 'per'
-    option :proc_num, type: :numeric, default: 1, desc: 'proc num for multi thread'
-    option :from, type: :numeric, default: 0, desc: 'from'
+    option :scroll, type: :string, default: "1m", desc: 'scroll'
     def copy
       @core.copy(
         options[:source],
         options[:dest],
         options[:query],
         options[:per],
-        options[:proc_num],
-        options[:from]
+        options[:scroll]
       )
     end
 
