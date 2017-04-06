@@ -54,7 +54,12 @@ module Ej
           @client.delete_by_query index: index, type: type, q: '*'
         end
       else
-        @client.delete_by_query index: index, type: type, q: query
+        body = {
+          query: {
+            match: query
+          }
+        }
+        @client.delete_by_query index: index, body: body
       end
     end
 
