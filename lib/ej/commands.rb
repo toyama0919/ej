@@ -16,6 +16,7 @@ module Ej
     map '-a' => :aliases
     map '-m' => :mapping
     map '--health' => :health
+    map '-v' => :version
 
     def initialize(args = [], options = {}, config = {})
       super(args, options, config)
@@ -239,6 +240,11 @@ module Ej
     desc 'nodes_stats', 'view nodes stats'
     def nodes_stats
       puts_with_format @nodes.nodes_stats
+    end
+
+    desc '-v', 'show version'
+    def version
+      puts VERSION
     end
 
     private
