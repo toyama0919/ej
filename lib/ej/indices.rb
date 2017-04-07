@@ -51,7 +51,12 @@ module Ej
         if type.nil?
           @client.indices.delete index: index
         else
-          @client.delete_by_query index: index, type: type, q: '*'
+          body = {
+            query: {
+              match_all: {}
+            }
+          }
+          @client.delete_by_query index: index, type: type, body: body
         end
       else
         body = {
