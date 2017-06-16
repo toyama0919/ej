@@ -60,9 +60,7 @@ module Ej
         end
       else
         body = {
-          query: {
-            match: query
-          }
+          query: query
         }
         @client.delete_by_query index: index, body: body
       end

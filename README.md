@@ -61,6 +61,12 @@ ej -m -h other_host
 ej delete -i logstash-2014.07.01 -h other_host
 ```
 
+### delete by query
+```bash
+ej delete -i logstash-2014.07.01 -q '{ match: { user_id: 1 } }' -h other_host
+ej delete -i logstash-2014.07.01 -q '{"range":{"@timestamp":{"lte":"2014-07-01"}}}' -h other_host
+```
+
 ### copy index from remote to remote
 ```bash
 ej copy --source remote_host1:9200 --dest remote_host2:9200 -i logstash-2017.01.27 -q 'size: 631'

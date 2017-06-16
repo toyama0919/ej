@@ -201,9 +201,10 @@ module Ej
     desc 'delete', 'delete'
     option :index, aliases: '-i', type: :string, default: nil, required: true, desc: 'index'
     option :type, type: :string, aliases: '-t', default: nil, desc: 'type'
-    option :query, type: :hash, aliases: '-q', default: nil, desc: 'query'
+    option :query, type: :string, aliases: '-q', default: nil, desc: 'query'
     def delete
-      @indices.delete(options[:index], options[:type], options[:query])
+      query = eval(options[:query])
+      @indices.delete(options[:index], options[:type], query)
     end
 
     desc 'delete_template --name [name]', 'delete_template'
