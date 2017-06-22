@@ -203,7 +203,7 @@ module Ej
     option :type, type: :string, aliases: '-t', default: nil, desc: 'type'
     option :query, type: :string, aliases: '-q', default: nil, desc: 'query'
     def delete
-      query = eval(options[:query])
+      query = options[:query] ? eval(options[:query]) : nil
       @indices.delete(options[:index], options[:type], query)
     end
 
