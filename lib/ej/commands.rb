@@ -5,7 +5,7 @@ require 'yajl'
 module Ej
   class Commands < Thor
     class_option :index, aliases: '-i', type: :string, default: '_all', desc: 'index'
-    class_option :host, aliases: '-h', type: :string, default: 'localhost', desc: 'host'
+    class_option :host, aliases: '-h', type: :string, default: DEFAULT_HOST, desc: 'host'
     class_option :debug, aliases: '-d', type: :boolean, default: false, desc: 'debug mode'
 
     map '-s' => :search

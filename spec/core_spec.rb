@@ -6,7 +6,7 @@ describe Ej::Core do
     values = Values.new(
       {
         index: '_all',
-        host: 'localhost',
+        host: DEFAULT_HOST,
         debug: false
       }
     )

@@ -11,11 +11,16 @@ module Ej
       @index = global_options[:index]
     end
 
-    def get_client(host, index)
-      host, port = host.split(':')
+    def get_client(host_string, index)
+      host, port = (host_string || DEFAULT_HOST), DEFAULT_PORT
+      if !host_string.nil? && host_string.include?(":")
+        host, port = host_string.split(':')
+      end
+
+      hosts = [{ host: host, port: port }]
       transport = ::Elasticsearch::Transport::Transport::HTTP::Faraday.new(
         {
-          hosts: [{ host: host, port: port }],
+          hosts: hosts,
           options: {
             reload_connections: true,
             reload_on_failure: false,
