@@ -70,13 +70,15 @@ module Ej
     option :query, type: :string, aliases: '-q', default: nil, desc: 'query'
     option :per, type: :numeric, default: nil, desc: 'per'
     option :scroll, type: :string, default: "1m", desc: 'scroll'
+    option :dest_index, type: :string, desc: 'dest index'
     def copy
       @core.copy(
         options[:source],
         options[:dest],
         options[:query],
         options[:per],
-        options[:scroll]
+        options[:scroll],
+        options[:dest_index]
       )
     end
 
