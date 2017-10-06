@@ -7,17 +7,17 @@ module Ej
     def initialize(global_options)
       @logger =  Logger.new($stderr)
       @logger.level = global_options[:debug] ? Logger::DEBUG : Logger::INFO
-      @client = get_client(global_options[:host], global_options[:index])
+      @client = get_client(global_options[:host], global_options[:index], global_options[:user], global_options[:password])
       @index = global_options[:index]
     end
 
-    def get_client(host_string, index)
+    def get_client(host_string, index, user, password)
       host, port = (host_string || DEFAULT_HOST), DEFAULT_PORT
       if !host_string.nil? && host_string.include?(":")
         host, port = host_string.split(':')
       end
 
-      hosts = [{ host: host, port: port }]
+      hosts = [{ host: host, port: port, user: user, password: password }]
       transport = ::Elasticsearch::Transport::Transport::HTTP::Faraday.new(
         {
           hosts: hosts,
