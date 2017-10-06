@@ -71,6 +71,7 @@ module Ej
     option :per, type: :numeric, default: nil, desc: 'per'
     option :scroll, type: :string, default: "1m", desc: 'scroll'
     option :dest_index, type: :string, desc: 'dest index'
+    option :slice_max, type: :numeric, desc: 'slice max'
     def copy
       @core.copy(
         options[:source],
@@ -78,7 +79,8 @@ module Ej
         options[:query],
         options[:per],
         options[:scroll],
-        options[:dest_index]
+        options[:dest_index],
+        options[:slice_max]
       )
     end
 
