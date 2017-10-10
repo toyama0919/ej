@@ -211,7 +211,7 @@ module Ej
         if retries < retry_on_failure
           retries += 1
           @logger.warn "Could not connect to Elasticsearch, resetting connection and trying again. #{e.message}"
-          sleep 2**retries
+          sleep 10**retries
           retry
         end
         raise "Could not connect to Elasticsearch after #{retries} retries. #{e.message}"
