@@ -1,4 +1,4 @@
-require 'yajl'
+require 'json'
 require 'elasticsearch'
 require 'hashie'
 require 'parallel'
@@ -54,8 +54,8 @@ module Ej
         docs.each do |doc|
           source = doc.delete('_source')
           doc.delete('_score')
-          bulk_message << Yajl::Encoder.encode({ 'index' => doc.to_h })
-          bulk_message << Yajl::Encoder.encode(source)
+          bulk_message << JSON.dump({ 'index' => doc.to_h })
+          bulk_message << JSON.dump(source)
         end
         num += 1
         puts bulk_message.join("\n")

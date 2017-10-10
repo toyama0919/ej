@@ -1,6 +1,6 @@
 require 'ej/core'
 require 'thor'
-require 'yajl'
+require 'json'
 
 module Ej
   class Commands < Thor
@@ -173,7 +173,7 @@ module Ej
     desc 'not_analyzed', 'not analyzed'
     def not_analyzed
       json = File.read(File.expand_path('../../../template/not_analyze_template.json', __FILE__))
-      hash = Yajl::Parser.parse(json)
+      hash = JSON.parse(json)
       puts_with_format(@indices.put_template('ej_init', hash))
     end
 
@@ -188,7 +188,7 @@ module Ej
 
     desc 'put_template', 'put template'
     def put_template(name)
-      hash = Yajl::Parser.parse(STDIN.read)
+      hash = JSON.parse(STDIN.read)
       puts_with_format(@indices.put_template(name, hash))
     end
 
@@ -257,7 +257,7 @@ module Ej
     private
 
     def puts_with_format(object)
-      puts Yajl::Encoder.encode(object, pretty: true)
+      puts JSON.pretty_generate(object)
     end
 
   end

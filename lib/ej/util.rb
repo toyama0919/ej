@@ -2,11 +2,11 @@ module Ej
   class Util
     def self.parse_json(buffer)
       begin
-        data = Yajl::Parser.parse(buffer)
+        data = JSON.parse(buffer)
       rescue => e
         data = []
         buffer.lines.each do |line|
-          data << Yajl::Parser.parse(line)
+          data << JSON.parse(line)
         end
       end
       data.class == Array ? data : [data]
