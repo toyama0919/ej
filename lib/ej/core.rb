@@ -152,7 +152,7 @@ module Ej
       dest_client = Elasticsearch::Client.new hosts: dest
 
       parallel_array = slice_max ? slice_max.times.to_a : [0]
-      Parallel.map(parallel_array, :in_processes=>parallel_array.size) do |slice_id|
+      Parallel.map(parallel_array, :in_threads => parallel_array.size) do |slice_id|
         scroll_option = get_scroll_option(@index, query, per_size, scroll, slice_id, slice_max)
         r = connect_with_retry { source_client.search(scroll_option) }
         total = r['hits']['total']
