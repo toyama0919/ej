@@ -44,7 +44,7 @@ module Ej
         host, port = host_string.split(':')
       end
 
-      hosts = [{ host: host, port: port, user: user, password: password }]
+      hosts = [{ host: host, port: port.to_i, user: user, password: password }]
       return hosts
     end
   end

@@ -31,6 +31,13 @@ describe Ej::Util do
     Util.generate_id('%s_%s', {"id" => 1, "name" => "rspec"}, ['id', 'name']).should == '1_rspec'
   end
 
+  it "parse hosts" do
+    Util.parse_hosts(nil).should == [{ host: 'localhost', port: 9200, user: nil, password: nil }]
+    Util.parse_hosts("localhost").should == [{ host: 'localhost', port: 9200, user: nil, password: nil }]
+    Util.parse_hosts("localhost:9100").should == [{ host: 'localhost', port: 9100, user: nil, password: nil }]
+    Util.parse_hosts("localhost:9100", 'user', 'password').should == [{ host: 'localhost', port: 9100, user: 'user', password: 'password' }]
+  end
+
   after do
   end
 end
