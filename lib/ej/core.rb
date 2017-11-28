@@ -148,8 +148,8 @@ module Ej
     end
 
     def copy(source, dest, query, per_size, scroll, dest_index, slice_max)
-      source_client = Elasticsearch::Client.new hosts: source
-      dest_client = Elasticsearch::Client.new hosts: dest
+      source_client = Elasticsearch::Client.new transport: Util.get_transport(Util.parse_hosts(source))
+      dest_client = Elasticsearch::Client.new transport: Util.get_transport(Util.parse_hosts(dest))
 
       parallel_array = slice_max ? slice_max.times.to_a : [0]
       Parallel.map(parallel_array, :in_processes=>parallel_array.size) do |slice_id|

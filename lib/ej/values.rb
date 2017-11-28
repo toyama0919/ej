@@ -12,26 +12,8 @@ module Ej
     end
 
     def get_client(host_string, index, user, password)
-      host, port = (host_string || DEFAULT_HOST), DEFAULT_PORT
-      if !host_string.nil? && host_string.include?(":")
-        host, port = host_string.split(':')
-      end
-
-      hosts = [{ host: host, port: port, user: user, password: password }]
-      transport = ::Elasticsearch::Transport::Transport::HTTP::Faraday.new(
-        {
-          hosts: hosts,
-          options: {
-            reload_connections: true,
-            reload_on_failure: false,
-            retry_on_failure: 5,
-            transport_options: {
-              request: { timeout: 300 }
-            }
-          }
-        }
-      )
-      ::Elasticsearch::Client.new transport: transport, index: index, logger: @logger
+      hosts = Util.parse_hosts(host_string, user, password)
+      ::Elasticsearch::Client.new transport: Util.get_transport(hosts), index: index, logger: @logger
     end
   end
 end
